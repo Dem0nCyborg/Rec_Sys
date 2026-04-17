@@ -17,6 +17,15 @@
   }
 }
 
+/* hide scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .hero {
   position: relative;
 
@@ -181,4 +190,17 @@
     right: 0;
     border-right-color: var(--border);
   }
+}
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+/* optional: hide scrollbar */
+::-webkit-scrollbar {
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
 }

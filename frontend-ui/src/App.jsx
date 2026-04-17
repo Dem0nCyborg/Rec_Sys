@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 
 function App() {
-  const [userId, setUserId] = useState('A281N877SNCA7H');
+  const [userId, setUserId] = useState();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
 
   // A robust feature: Give the professor quick-test users
-  const sampleUsers = ['A281N877SNCA7H', 'B392X110POQL5', 'C884M992WEAZ1'];
+  const sampleUsers = ['A10JB7YPWZGRF4', 'A10ZJZNO4DAVB', 'A1E9D6RGEDFT2O'];
+  const [selectedImages, setSelectedImages] = useState({});
 
   const fetchRecs = async (idToFetch) => {
     setLoading(true);
@@ -82,46 +83,142 @@ function App() {
           <div className="grid gap-8 animate-in fade-in zoom-in-95 duration-500">
             
             {/* Top Stat Row - Light Mode Apple Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white/60 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 rounded-3xl backdrop-blur-2xl">
-                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Model Precision</p>
-                <p className="text-3xl font-semibold mt-2 text-slate-800">98.4%</p>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+              
+              <div className=" hover:scale-[1.02] transition-transform duration-200 bg-white/60 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 rounded-3xl backdrop-blur-2xl">
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">
+                  Model Precision
+                </p>
+                <p className="text-2xl font-semibold mt-2 text-slate-800">
+                  {data?.model_performance.precision.toFixed(4)}
+                </p>
               </div>
-              <div className="bg-white/60 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 rounded-3xl backdrop-blur-2xl">
-                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">MAE Score</p>
-                <p className="text-3xl font-semibold mt-2 text-blue-500">0.0939</p>
+
+              <div className="hover:scale-[1.02] transition-transform duration-200 bg-white/60 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 rounded-3xl backdrop-blur-2xl">
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">
+                  Recall
+                </p>
+                <p className="text-2xl font-semibold mt-2 text-blue-500">
+                  {data?.model_performance.recall.toFixed(4)}
+                </p>
               </div>
-              <div className="bg-white/60 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 rounded-3xl backdrop-blur-2xl">
-                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Inference Engine</p>
-                <p className="text-3xl font-semibold mt-2 text-purple-500">Gemma 3</p>
+
+              <div className="hover:scale-[1.02] transition-transform duration-200 bg-white/60 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 rounded-3xl backdrop-blur-2xl">
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">
+                  F-Measure
+                </p>
+                <p className="text-2xl font-semibold mt-2 text-purple-500">
+                  {data?.model_performance.f_measure.toFixed(4)}
+                </p>
               </div>
+
+              <div className="hover:scale-[1.02] transition-transform duration-200 bg-white/60 border border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 rounded-3xl backdrop-blur-2xl">
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">
+                  NDCG
+                </p>
+                <p className="text-2xl font-semibold mt-2 text-slate-700">
+                  {data?.model_performance.ndcg.toFixed(4)}
+                </p>
+              </div>
+
             </div>
 
             {/* Recommendations List - Rendering AI Reasoning for ALL items */}
             <div className="space-y-6 mt-4">
-              {data.recommendations.map((item, i) => (
-                <div key={i} className="bg-white/60 border border-white p-8 rounded-[2rem] hover:bg-white/80 transition-all shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-2xl">
-                  
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-2xl font-bold text-slate-800 mb-1">{item.name}</h3>
-                      <p className="text-slate-500 font-mono text-sm">{item.id} • {item.price}</p>
-                    </div>
-                    <div className="h-14 w-14 rounded-full border border-blue-200 flex items-center justify-center bg-blue-50 text-blue-600 font-bold text-lg">
-                      {item.confidence}
-                    </div>
-                  </div>
+              {data.recommendations.map((item, i) => {
 
-                  {/* Gemma Reasoning for EVERY item */}
-                  <div className="mt-6 p-5 bg-blue-50/50 rounded-2xl border border-blue-100/50 relative">
-                    <p className="text-slate-600 leading-relaxed text-md">
-                      <span className="text-blue-500 font-bold uppercase tracking-wider text-xs block mb-1">✨ Gemma 3 Reasoning</span> 
-                      "{item.ai_reason}"
-                    </p>
-                  </div>
+                const images = item.imageURLHighRes?.length
+                  ? item.imageURLHighRes
+                  : ["https://t3.ftcdn.net/jpg/05/04/28/96/360_F_504289605_zehJiK0tCuZLP2MdfFBpcJdOVxKLnXg1.jpg"];
 
-                </div>
-              ))}
+                const selectedImage = selectedImages[i] || images[0];
+                
+                // const images = item.imageURLHighRes?.length
+                //   ? item.imageURLHighRes
+                //   : ["https://via.placeholder.com/150"];
+
+                // Better label system
+                const label =
+                  item.score > 5 ? "🔥 Top Pick" :
+                  item.score > 4.7 ? "✨ Great Match" :
+                  "👍 Good Match";
+
+                return (
+                  <div
+                    key={i}
+                    className="bg-white/60 border border-white p-6 rounded-[2rem] hover:bg-white/80 transition-all shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-2xl"
+                  >
+
+                    {/* Top Section */}
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="text-xl font-bold text-slate-800 max-width-[700px]">
+                          {item.name}
+                        </h3>
+
+                        <p className="text-slate-500 text-sm">
+                          {item.item_id} • {item.brand || "Unknown Brand"}
+                        </p>
+
+                        <p className="text-green-600 font-semibold mt-1">
+                          {item.price || "Price not available"}
+                        </p>
+                      </div>
+
+                      {/* Score Badge */}
+                      <div className="px-4 py-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-s font-semibold shadow">
+                        {label}
+                      </div>
+                    </div>
+
+                    {/* 🔥 Image Carousel */}
+                    <div className="mt-4">
+
+                      {/* 🔥 Main Large Image */}
+                      <div className="w-full h-64 bg-white rounded-2xl flex items-center justify-center overflow-hidden border">
+                        <img
+                          src={selectedImage}
+                          alt="main"
+                          className="h-full object-contain transition-all duration-300"
+                        />
+                      </div>
+
+                      {/* 🔽 Thumbnails */}
+                      <div className="flex gap-3 mt-3 overflow-x-auto">
+                        {images.map((img, idx) => (
+                          <img
+                            key={idx}
+                            src={img}
+                            alt="thumb"
+                            onClick={() =>
+                              setSelectedImages(prev => ({
+                                ...prev,
+                                [i]: img
+                              }))
+                            }
+                            className={`w-16 h-16 object-cover rounded-lg border cursor-pointer transition-all
+                              ${selectedImage === img
+                                ? "border-blue-500 scale-105"
+                                : "opacity-70 hover:opacity-100"
+                              }`}
+                          />
+                        ))}
+                      </div>
+
+                    </div>
+                    {/* AI Reason */}
+                    <div className="mt-5 p-4 bg-blue-50/50 rounded-2xl border border-blue-100/50">
+                      <p className="text-slate-600 text-sm leading-relaxed">
+                        <span className="text-blue-500 font-bold uppercase text-xs block mb-1">
+                          ✨ AI Insight
+                        </span>
+                        {item.ai_reason || "This product matches your preferences based on similar users and past interactions."}
+                      </p>
+                    </div>
+
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
