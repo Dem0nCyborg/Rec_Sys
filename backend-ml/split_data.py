@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 print("Loading dataset for splitting...")
 file_path = "data/All_Beauty_5.json.gz" 
 df = pd.read_json(file_path, lines=True, compression='gzip')
+#df = df.groupby('reviewerID').filter(lambda x: len(x) >= 5)
 
 # Keep only the essential columns to save memory
 df = df[['reviewerID', 'asin', 'overall', 'reviewText']]

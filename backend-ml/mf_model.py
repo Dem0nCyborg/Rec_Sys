@@ -81,6 +81,8 @@ optimizer = optim.Adam(model.parameters(), lr=0.01, weight_decay=1e-5) # weight_
 
 print("3. Training the PyTorch Model...")
 epochs = 10
+
+
 for epoch in range(epochs):
     model.train()
     total_loss = 0

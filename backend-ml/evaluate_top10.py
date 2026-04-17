@@ -38,7 +38,7 @@ class MatrixFactorization(nn.Module):
 
 # Load the trained "brain" you just generated
 model = MatrixFactorization(num_users, num_items, emb_dim=32)
-model.load_state_dict(torch.load('data/mf_model_weights.pth'))
+model.load_state_dict(torch.load('data/mf_model_weights_BEST_0.0939.pth'))
 model.eval() # Set to evaluation mode
 
 print("2. Generating Top-10 Recommendations for each user...")
@@ -63,7 +63,7 @@ with torch.no_grad():
         # 3. Predict all unseen items at once
         predictions = model(u_idx, i_idx).numpy()
         
-        # 4. Rank and get the Top 10 Recommended Items
+        # 4. Rank and get the Top 10 Remf_model_weights.pthcommended Items
         top_10_indices = np.argsort(predictions)[::-1][:10]
         top_10_items = [unseen_items[idx] for idx in top_10_indices]
         
